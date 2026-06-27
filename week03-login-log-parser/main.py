@@ -1,16 +1,28 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import sys
+from pathlib import Path
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+def parse_log_line(line: str) -> dict[str, str] | None:
+    ...
 
+def failures_by_ip(entries: list[dict[str, str]]) -> dict[str, int]:
+    ...
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def top_offenders(counts: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
+    ...
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+def summary_report(entries: list[dict[str, str]]) -> str:
+    ...
+
+def main() -> None:
+    if len(sys.argv) != 2:
+        print("Usage: python main.py <logfile>")
+        sys.exit(1)
+
+    log_path = Path(sys.argv[1])
+    lines = log_path.read_text().splitlines()
+    entries = [e for line in lines if (e := parse_log_line(line)) is not None]
+    print(summary_report(entries))
+
+if __name__ == "__main__":
+    main()
