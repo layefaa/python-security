@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from collections import Counter
 
 
 def parse_log_line(line: str) -> dict[str, str] | None:
@@ -9,10 +10,7 @@ def parse_log_line(line: str) -> dict[str, str] | None:
     return None
 
 def failures_by_ip(entries: list[dict[str, str]]) -> dict[str, int]:
-    counts = {}
-    for entry in entries:
-        ip = entry["ip"]
-        counts[ip] = counts.get(ip, 0) + 1
+    counts = Counter(entry["ip"] for entry in entries)
     return counts
 
 def top_offenders(counts: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
